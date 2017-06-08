@@ -113,11 +113,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="World.cpp" />
     <ClCompile Include="Hero.cpp" />
     <ClCompile Include="Game.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AreaManager.h" />
+    <ClInclude Include="Gloabals.h" />
+    <ClInclude Include="InputManager.h" />
     <ClInclude Include="World.h" />
     <ClInclude Include="Hero.h" />
   </ItemGroup>

@@ -4,6 +4,9 @@
 #include <string>
 #include <vector>
 #include "Hero.h"
+#include "Gloabals.h"
+#include "InputManager.h"
+#include "AreaManager.h"
 
 class World
 {

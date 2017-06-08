@@ -38,6 +38,7 @@ void World::PlayGame()
 	{
 		std::getline(std::cin, command);
 
+		/*
 		if (command == "status")
 		{
 			hero.Status();
@@ -213,6 +214,7 @@ void World::PlayGame()
 		{
 			InvalidCommand(command);
 		}
+		*/
 	}
 }
 
