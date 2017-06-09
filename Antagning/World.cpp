@@ -32,6 +32,7 @@ void World::Update()
 			else if (areamanager.IsPool())
 			{
 				PoolMsg();
+				hero.Heal();
 			}
 
 			else if (areamanager.IsShop())
@@ -153,16 +154,6 @@ void World::Update()
 	if (gameIsWon)
 	{
 		std::cout << "Congratulations! You've completed the game." << std::endl;
-	}
-}
-
-void World::PlayGame()
-{
-	if (hero.IsAlive())
-	{
-		std::getline(std::cin, command);
-
-		
 	}
 }
 

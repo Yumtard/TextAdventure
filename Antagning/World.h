@@ -13,7 +13,6 @@ class World
 public:
 	World();
 	void Update();
-	void PlayGame();
 	void InvalidCommand(std::string cmnd);
 	void CrossRoadMsg();
 	void PlainsMsg();
