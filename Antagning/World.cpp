@@ -23,103 +23,7 @@ void World::Update()
 		}
 		else
 		{
-			switch (input)
-			{
-			case Globals::Status:
-				hero.Status();
-				break;
-
-			case Globals::Charm:
-				if (areamanager.CurrentTile() == Tile::HeroShop)
-				{
-					if (!charmIsObtained)
-					{
-						if (hero.BuyCharm(charmPrice))
-						{
-							std::cout << "You have bought the Charm of Capitalism for 20 gold" << std::endl;
-							charmIsObtained = true;
-							charmMultiplier = 10;
-							inventory[0] = inventory.back();
-							inventory.pop_back();
-						}
-					}
-					else
-					{
-						std::cout << "You have already bought this item." << std::endl;
-					}
-				}
-
-				else
-				{
-					std::cout << "Visit Hero's Shop to purchase items." << std::endl;
-				}
-
-				break;
-
-			case Globals::Inventory:
-				if (areamanager.CurrentTile() == Tile::HeroShop)
-				{
-					if (inventory.size() == 0)
-					{
-						std::cout << "We're all out of items to buy." << std::endl;
-					}
-
-					else
-					{
-						std::cout << "The shopkeeper has the following in stock:" << std::endl;
-
-						for (int i = 0; i < inventory.size(); ++i)
-						{
-							std::cout << "- " << inventory[i] << std::endl;
-						}
-					}
-				}
-
-				else
-				{
-					std::cout << "Visit Hero's shop to see what's available for purchase." << std::endl;
-				}
-				break;
-
-			case Globals::Kill:
-				if (areamanager.CurrentTile() == Tile::Plains)
-				{
-					hero.KillMonster(charmMultiplier);
-				}
-				else
-				{
-					std::cout << "There are no monsters here for you to kill." << std::endl;
-				}
-				break;
-
-			case Globals::Talisman:
-				if (areamanager.CurrentTile() == Tile::HeroShop)
-				{
-					if (!talismanIsObtained)
-					{
-						if (hero.BuyTalisman(talismanPrice))
-						{
-							std::cout << "You have bought the Talisman of Truth for 100 gold" << std::endl;
-							talismanIsObtained = true;
-							inventory.pop_back();
-						}
-					}
-					else
-					{
-						std::cout << "You have already bought this item." << std::endl;
-					}
-				}
-
-				else
-				{
-					std::cout << "Visit Hero's Shop to purchase items." << std::endl;
-				}
-				break;
-
-			case Globals::Invalid:
-				InvalidCommand(command);
-				break;
-			}
+			NonDirectionInput(input, command);
 		}
 	}
 		
@@ -173,6 +77,107 @@ void World::HandleArea(Tile::Type tileType)
 			std::cout << "It fills you with immense power and you effortlessly kill the beast." << std::endl;
 			gameIsWon = true;
 		}
+		break;
+	}
+}
+
+void World::NonDirectionInput(Globals::PlayerInput _input, std::string _command)
+{
+	switch (_input)
+	{
+	case Globals::Status:
+		hero.Status();
+		break;
+
+	case Globals::Charm:
+		if (areamanager.CurrentTile() == Tile::HeroShop)
+		{
+			if (!charmIsObtained)
+			{
+				if (hero.BuyCharm(charmPrice))
+				{
+					std::cout << "You have bought the Charm of Capitalism for 20 gold" << std::endl;
+					charmIsObtained = true;
+					charmMultiplier = 10;
+					inventory[0] = inventory.back();
+					inventory.pop_back();
+				}
+			}
+			else
+			{
+				std::cout << "You have already bought this item." << std::endl;
+			}
+		}
+
+		else
+		{
+			std::cout << "Visit Hero's Shop to purchase items." << std::endl;
+		}
+
+		break;
+
+	case Globals::Inventory:
+		if (areamanager.CurrentTile() == Tile::HeroShop)
+		{
+			if (inventory.size() == 0)
+			{
+				std::cout << "We're all out of items to buy." << std::endl;
+			}
+
+			else
+			{
+				std::cout << "The shopkeeper has the following in stock:" << std::endl;
+
+				for (int i = 0; i < inventory.size(); ++i)
+				{
+					std::cout << "- " << inventory[i] << std::endl;
+				}
+			}
+		}
+
+		else
+		{
+			std::cout << "Visit Hero's shop to see what's available for purchase." << std::endl;
+		}
+		break;
+
+	case Globals::Kill:
+		if (areamanager.CurrentTile() == Tile::Plains)
+		{
+			hero.KillMonster(charmMultiplier);
+		}
+		else
+		{
+			std::cout << "There are no monsters here for you to kill." << std::endl;
+		}
+		break;
+
+	case Globals::Talisman:
+		if (areamanager.CurrentTile() == Tile::HeroShop)
+		{
+			if (!talismanIsObtained)
+			{
+				if (hero.BuyTalisman(talismanPrice))
+				{
+					std::cout << "You have bought the Talisman of Truth for 100 gold" << std::endl;
+					talismanIsObtained = true;
+					inventory.pop_back();
+				}
+			}
+			else
+			{
+				std::cout << "You have already bought this item." << std::endl;
+			}
+		}
+
+		else
+		{
+			std::cout << "Visit Hero's Shop to purchase items." << std::endl;
+		}
+		break;
+
+	case Globals::Invalid:
+		InvalidCommand(_command);
 		break;
 	}
 }

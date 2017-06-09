@@ -16,6 +16,7 @@ public:
 	void Update();
 	void InvalidCommand(std::string cmnd);
 	void HandleArea(Tile::Type tileType);
+	void NonDirectionInput(Globals::PlayerInput _input, std::string _command);
 
 private:
 	Hero hero;
