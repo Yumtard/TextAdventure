@@ -14,8 +14,9 @@ void World::Update()
 	HandleArea(areamanager.CurrentTile());
 	while (hero.IsAlive() && !gameIsWon)
 	{
+		std::string command;
 		std::getline(std::cin, command);
-		input = inputManager.GetInput(command);
+		Globals::PlayerInput input = inputManager.GetInput(command);
 
 		if (areamanager.Walk(input))
 		{
@@ -81,7 +82,7 @@ void World::HandleArea(Tile::Type tileType)
 	}
 }
 
-void World::NonDirectionInput(Globals::PlayerInput _input, std::string _command)
+void World::NonDirectionInput(Globals::PlayerInput _input, std::string cmnd)
 {
 	switch (_input)
 	{
@@ -177,7 +178,7 @@ void World::NonDirectionInput(Globals::PlayerInput _input, std::string _command)
 		break;
 
 	case Globals::Invalid:
-		InvalidCommand(_command);
+		InvalidCommand(cmnd);
 		break;
 	}
 }

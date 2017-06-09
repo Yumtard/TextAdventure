@@ -16,11 +16,10 @@ public:
 	void Update();
 	void InvalidCommand(std::string cmnd);
 	void HandleArea(Tile::Type tileType);
-	void NonDirectionInput(Globals::PlayerInput _input, std::string _command);
+	void NonDirectionInput(Globals::PlayerInput _input, std::string cmnd);
 
 private:
 	Hero hero;
-	std::string command;
 	std::vector<std::string> inventory;
 	static constexpr int talismanPrice = 100;
 	static constexpr int charmPrice = 20;
@@ -29,6 +28,5 @@ private:
 	int charmMultiplier = 1;
 	bool gameIsWon = false;
 	InputManager inputManager;
-	Globals::PlayerInput input;
 	AreaManager areamanager;
 };
