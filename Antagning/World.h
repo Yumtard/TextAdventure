@@ -15,11 +15,7 @@ public:
 	World();
 	void Update();
 	void InvalidCommand(std::string cmnd);
-	void CrossRoadMsg();
-	void PlainsMsg();
-	void ShopMsg();
-	void PoolMsg();
-	void TwilightMsg();
+	void HandleArea(Tile::Type tileType);
 
 private:
 	Hero hero;

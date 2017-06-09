@@ -11,7 +11,7 @@ World::World()
 
 void World::Update()
 {
-	CrossRoadMsg();
+	HandleArea(areamanager.CurrentTile());
 	while (hero.IsAlive() && !gameIsWon)
 	{
 		std::getline(std::cin, command);
@@ -19,31 +19,7 @@ void World::Update()
 
 		if (areamanager.Walk(input))
 		{
-			if (areamanager.CurrentTile() == Tile::CrossRoads)
-			{
-				CrossRoadMsg();
-			}
-
-			else if (areamanager.CurrentTile() == Tile::Plains)
-			{
-				PlainsMsg();
-			}
-
-			else if (areamanager.CurrentTile() == Tile::Pool)
-			{
-				PoolMsg();
-				hero.Heal();
-			}
-
-			else if (areamanager.CurrentTile() == Tile::HeroShop)
-			{
-				ShopMsg();
-			}
-
-			else if (areamanager.CurrentTile() == Tile::Twilight)
-			{
-				TwilightMsg();
-			}
+			HandleArea(areamanager.CurrentTile());
 		}
 		else
 		{
@@ -162,40 +138,42 @@ void World::InvalidCommand(std::string cmnd)
 	std::cout << "Sorry, \"" << cmnd << "\" is not a valid command" << std::endl;
 }
 
-void World::CrossRoadMsg()
+void World::HandleArea(Tile::Type tileType)
 {
-	std::cout << "You are standing at the Crossroads. The sun is shining down through the foliage." << std::endl;
-}
-
-void World::PlainsMsg()
-{
-	std::cout << "You are standing on the Plains of Grinding. Monsters are lined up in a queue, staring at you." << std::endl;
-}
-
-void World::ShopMsg()
-{
-	std::cout << "You entered the conveniently places Hero's Shop. A shopkeeper is staring at you." << std::endl;
-}
-
-void World::PoolMsg()
-{
-	std::cout << "You enter the Pool of Rejuvination. You feel power surge through you!" << std::endl;
-}
-
-void World::TwilightMsg()
-{
-	std::cout << "You have entered the Twlight Cave. A horrifying beast emerges from the shadows." << std::endl;
-
-	if (!talismanIsObtained)
+	switch (tileType)
 	{
-		std::cout << "The beast is too powerful." << std::endl;
-		hero.KillHero();
-	}
-	else
-	{
-		std::cout << "You pull out the Talisman of Truth" << std::endl;
-		std::cout << "It fills you with immense power and you effortlessly kill the beast." << std::endl;
-		gameIsWon = true;
+	case Tile::CrossRoads:
+		std::cout << "You are standing at the Crossroads. The sun is shining down through the foliage." << std::endl;
+		break;
+
+	case Tile::Plains:
+		std::cout << "You are standing on the Plains of Grinding. Monsters are lined up in a queue, staring at you." << std::endl;
+		break;
+
+	case Tile::HeroShop:
+		std::cout << "You entered the conveniently places Hero's Shop. A shopkeeper is staring at you." << std::endl;
+		break;
+
+	case Tile::Pool:
+		std::cout << "You enter the Pool of Rejuvination. You feel power surge through you!" << std::endl;
+		hero.Heal();
+		break;
+
+	case Tile::Twilight:
+		std::cout << "You have entered the Twlight Cave. A horrifying beast emerges from the shadows." << std::endl;
+
+		if (!talismanIsObtained)
+		{
+			std::cout << "The beast is too powerful." << std::endl;
+			hero.KillHero();
+		}
+		else
+		{
+			std::cout << "You pull out the Talisman of Truth" << std::endl;
+			std::cout << "It fills you with immense power and you effortlessly kill the beast." << std::endl;
+			gameIsWon = true;
+		}
+		break;
 	}
 }
 

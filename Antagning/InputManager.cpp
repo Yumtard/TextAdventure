@@ -1,5 +1,8 @@
 #include "InputManager.h"
 
+//User input gets passed to the function in a string
+//Returns a Global enum based on the contents of the string
+
 Globals::PlayerInput InputManager::GetInput(std::string command)
 {
 	if (command == "west" || command == "West")

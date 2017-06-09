@@ -1,5 +1,7 @@
 #pragma once
 
+//Gloabal enums with all possible commands and invalid other user input
+
 class Globals
 {
 public:
