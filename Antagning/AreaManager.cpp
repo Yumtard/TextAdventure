@@ -1,5 +1,18 @@
 #include "AreaManager.h"
 
+AreaManager::AreaManager()
+{
+	tiles[0][0] = { Tile(Tile::Type::Empty) };
+	tiles[1][0] = { Tile(Tile::Type::Twilight) };
+	tiles[2][0] = { Tile(Tile::Type::Empty) };
+	tiles[0][1] = { Tile(Tile::Type::Plains) };
+	tiles[1][1] = { Tile(Tile::Type::CrossRoads) };
+	tiles[2][1] = { Tile(Tile::Type::HeroShop) };
+	tiles[0][2] = { Tile(Tile::Type::Empty) };
+	tiles[1][2] = { Tile(Tile::Type::Pool) };
+	tiles[2][2] = { Tile(Tile::Type::Empty) };
+}
+
 bool AreaManager::Walk(Globals::PlayerInput & input)
 {
 	if (MoveInDirection(input))
@@ -14,10 +27,9 @@ bool AreaManager::MoveInDirection(Globals::PlayerInput & input)
 {
 	if (input == Globals::West)
 	{
-		if (tile.CanWalk(input, x, y))
+		if (tiles[x - 1][y].CanWalk())
 		{
 			x--;
-			tile.SetCurrentTile(x, y);
 			return true;
 		}
 		else
@@ -28,10 +40,9 @@ bool AreaManager::MoveInDirection(Globals::PlayerInput & input)
 
 	else if (input == Globals::East)
 	{
-		if (tile.CanWalk(input, x, y))
+		if (tiles[x + 1][y].CanWalk())
 		{
 			x++;
-			tile.SetCurrentTile(x, y);
 			return true;
 		}
 		else
@@ -42,10 +53,9 @@ bool AreaManager::MoveInDirection(Globals::PlayerInput & input)
 
 	else if (input == Globals::North)
 	{
-		if (tile.CanWalk(input, x, y))
+		if (tiles[x][y - 1].CanWalk())
 		{
-			y++;
-			tile.SetCurrentTile(x, y);
+			y--;
 			return true;
 		}
 		else
@@ -56,10 +66,9 @@ bool AreaManager::MoveInDirection(Globals::PlayerInput & input)
 
 	else if (input == Globals::South)
 	{
-		if (tile.CanWalk(input, x, y))
+		if (tiles[x][y + 1].CanWalk())
 		{
-			y--;
-			tile.SetCurrentTile(x, y);
+			y++;
 			return true;
 		}
 		else
@@ -71,27 +80,7 @@ bool AreaManager::MoveInDirection(Globals::PlayerInput & input)
 	return false;
 }
 
-bool AreaManager::IsShop() const
+Tile::Type AreaManager::CurrentTile() const
 {
-	return tile.IsShop();
-}
-
-bool AreaManager::IsPlains() const
-{
-	return tile.IsPlains();
-}
-
-bool AreaManager::IsCrossroads() const
-{
-	return tile.IsCrossroads();
-}
-
-bool AreaManager::IsPool() const
-{
-	return tile.IsPool();
-}
-
-bool AreaManager::IsTwilight() const
-{
-	return tile.IsTwilight();
+	return tiles[x][y].GetTileType();
 }

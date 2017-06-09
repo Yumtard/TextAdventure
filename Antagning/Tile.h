@@ -9,16 +9,12 @@ class Tile
 public:
 	enum Type
 	{
-		CrossRoads, Plains, Twilight, Pool, HeroShop
+		CrossRoads, Plains, Twilight, Pool, HeroShop, Empty
 	};
-
-	bool CanWalk(Globals::PlayerInput& input, int x, int y);
-	void SetCurrentTile(int x, int y);
-	bool IsShop() const;
-	bool IsPlains() const;
-	bool IsCrossroads() const;
-	bool IsPool() const;
-	bool IsTwilight() const;
+	Tile(Type type_in);
+	Tile() = default;
+	bool CanWalk();
+	Type GetTileType() const;
 
 private:
 	bool west;

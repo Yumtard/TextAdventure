@@ -7,6 +7,7 @@
 #include "Gloabals.h"
 #include "InputManager.h"
 #include "AreaManager.h"
+#include "Tile.h"
 
 class World
 {

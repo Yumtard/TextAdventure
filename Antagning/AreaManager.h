@@ -6,16 +6,13 @@
 class AreaManager
 {
 public:
+	AreaManager();
 	bool Walk(Globals::PlayerInput& input);
 	bool MoveInDirection(Globals::PlayerInput& input);
-	bool IsShop() const;
-	bool IsPlains() const;
-	bool IsCrossroads() const;
-	bool IsPool() const;
-	bool IsTwilight() const;
+	Tile::Type CurrentTile() const;
 
 private:
 	int x = 1;
 	int y = 1;
-	Tile tile;
+	Tile tiles[3][3];
 };

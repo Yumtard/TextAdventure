@@ -19,28 +19,28 @@ void World::Update()
 
 		if (areamanager.Walk(input))
 		{
-			if (areamanager.IsCrossroads())
+			if (areamanager.CurrentTile() == Tile::CrossRoads)
 			{
 				CrossRoadMsg();
 			}
 
-			else if (areamanager.IsPlains())
+			else if (areamanager.CurrentTile() == Tile::Plains)
 			{
 				PlainsMsg();
 			}
 
-			else if (areamanager.IsPool())
+			else if (areamanager.CurrentTile() == Tile::Pool)
 			{
 				PoolMsg();
 				hero.Heal();
 			}
 
-			else if (areamanager.IsShop())
+			else if (areamanager.CurrentTile() == Tile::HeroShop)
 			{
 				ShopMsg();
 			}
 
-			else if (areamanager.IsTwilight())
+			else if (areamanager.CurrentTile() == Tile::Twilight)
 			{
 				TwilightMsg();
 			}
@@ -54,7 +54,7 @@ void World::Update()
 				break;
 
 			case Globals::Charm:
-				if (areamanager.IsShop())
+				if (areamanager.CurrentTile() == Tile::HeroShop)
 				{
 					if (!charmIsObtained)
 					{
@@ -81,7 +81,7 @@ void World::Update()
 				break;
 
 			case Globals::Inventory:
-				if (areamanager.IsShop())
+				if (areamanager.CurrentTile() == Tile::HeroShop)
 				{
 					if (inventory.size() == 0)
 					{
@@ -106,7 +106,7 @@ void World::Update()
 				break;
 
 			case Globals::Kill:
-				if (areamanager.IsPlains())
+				if (areamanager.CurrentTile() == Tile::Plains)
 				{
 					hero.KillMonster(charmMultiplier);
 				}
@@ -117,7 +117,7 @@ void World::Update()
 				break;
 
 			case Globals::Talisman:
-				if (areamanager.IsShop())
+				if (areamanager.CurrentTile() == Tile::HeroShop)
 				{
 					if (!talismanIsObtained)
 					{
