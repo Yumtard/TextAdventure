@@ -11,10 +11,6 @@
 class World
 {
 public:
-	enum Location
-	{
-		Crossroads, PlainsOfGrinding, Shop, Pool, TwilightCave
-	};
 	World();
 	void Update();
 	void PlayGame();
@@ -28,7 +24,6 @@ public:
 private:
 	Hero hero;
 	std::string command;
-	Location location = Crossroads;
 	std::vector<std::string> inventory;
 	static constexpr int talismanPrice = 100;
 	static constexpr int charmPrice = 20;
@@ -36,4 +31,7 @@ private:
 	bool talismanIsObtained = false;
 	int charmMultiplier = 1;
 	bool gameIsWon = false;
+	InputManager inputManager;
+	Globals::PlayerInput input;
+	AreaManager areamanager;
 };

@@ -14,11 +14,135 @@ void World::Update()
 	CrossRoadMsg();
 	while (hero.IsAlive() && !gameIsWon)
 	{
-		PlayGame();
+		std::getline(std::cin, command);
+		input = inputManager.GetInput(command);
 
-		if (location == Pool)
+		if (areamanager.Walk(input))
 		{
-			hero.Heal();
+			if (areamanager.IsCrossroads())
+			{
+				CrossRoadMsg();
+			}
+
+			else if (areamanager.IsPlains())
+			{
+				PlainsMsg();
+			}
+
+			else if (areamanager.IsPool())
+			{
+				PoolMsg();
+			}
+
+			else if (areamanager.IsShop())
+			{
+				ShopMsg();
+			}
+
+			else if (areamanager.IsTwilight())
+			{
+				TwilightMsg();
+			}
+		}
+		else
+		{
+			switch (input)
+			{
+			case Globals::Status:
+				hero.Status();
+				break;
+
+			case Globals::Charm:
+				if (areamanager.IsShop())
+				{
+					if (!charmIsObtained)
+					{
+						if (hero.BuyCharm(charmPrice))
+						{
+							std::cout << "You have bought the Charm of Capitalism for 20 gold" << std::endl;
+							charmIsObtained = true;
+							charmMultiplier = 10;
+							inventory[0] = inventory.back();
+							inventory.pop_back();
+						}
+					}
+					else
+					{
+						std::cout << "You have already bought this item." << std::endl;
+					}
+				}
+
+				else
+				{
+					std::cout << "Visit Hero's Shop to purchase items." << std::endl;
+				}
+
+				break;
+
+			case Globals::Inventory:
+				if (areamanager.IsShop())
+				{
+					if (inventory.size() == 0)
+					{
+						std::cout << "We're all out of items to buy." << std::endl;
+					}
+
+					else
+					{
+						std::cout << "The shopkeeper has the following in stock:" << std::endl;
+
+						for (int i = 0; i < inventory.size(); ++i)
+						{
+							std::cout << "- " << inventory[i] << std::endl;
+						}
+					}
+				}
+
+				else
+				{
+					std::cout << "Visit Hero's shop to see what's available for purchase." << std::endl;
+				}
+				break;
+
+			case Globals::Kill:
+				if (areamanager.IsPlains())
+				{
+					hero.KillMonster(charmMultiplier);
+				}
+				else
+				{
+					std::cout << "There are no monsters here for you to kill." << std::endl;
+				}
+				break;
+
+			case Globals::Talisman:
+				if (areamanager.IsShop())
+				{
+					if (!talismanIsObtained)
+					{
+						if (hero.BuyTalisman(talismanPrice))
+						{
+							std::cout << "You have bought the Talisman of Truth for 100 gold" << std::endl;
+							talismanIsObtained = true;
+							inventory.pop_back();
+						}
+					}
+					else
+					{
+						std::cout << "You have already bought this item." << std::endl;
+					}
+				}
+
+				else
+				{
+					std::cout << "Visit Hero's Shop to purchase items." << std::endl;
+				}
+				break;
+
+			case Globals::Invalid:
+				InvalidCommand(command);
+				break;
+			}
 		}
 	}
 		
@@ -38,183 +162,7 @@ void World::PlayGame()
 	{
 		std::getline(std::cin, command);
 
-		/*
-		if (command == "status")
-		{
-			hero.Status();
-		}
-
-		else if (command == "north")
-		{
-			switch (location)
-			{
-			case Crossroads:
-				location = TwilightCave;
-				TwilightMsg();
-				break;
-
-			case Pool:
-				location = Crossroads;
-				CrossRoadMsg();
-				break;
-
-			default:
-				std::cout << "Can't go north." << std::endl;
-			}
-		}
-
-		else if (command == "west")
-		{
-			switch (location)
-			{
-			case Crossroads:
-				location = PlainsOfGrinding;
-				PlainsMsg();
-				break;
-
-			case Shop:
-				location = Crossroads;
-				CrossRoadMsg();
-				break;
-
-			default:
-				std::cout << "Can't go west." << std::endl;
-			}
-		}
-
-		else if (command == "south")
-		{
-			switch (location)
-			{
-			case Crossroads:
-				location = Pool;
-				PoolMsg();
-				break;
-
-			default:
-				std::cout << "Can't go south." << std::endl;
-			}
-		}
-
-		else if (command == "east")
-		{
-			switch (location)
-			{
-			case Crossroads:
-				location = Shop;
-				ShopMsg();
-				break;
-
-			case PlainsOfGrinding:
-				location = Crossroads;
-				CrossRoadMsg();
-				break;
-
-			default:
-				std::cout << "Can't go east." << std::endl;
-			}
-		}
-
-		else if (command == "kill monster")
-		{
-			switch (location)
-			{
-			case PlainsOfGrinding:
-				hero.KillMonster(charmMultiplier);
-				
-				break;
-
-			default:
-				std::cout << "There are no monsters here." << std::endl;
-			}
-		}
-
-		else if (command == "look inventory")
-		{
-			switch (location)
-			{
-			case Shop:
-				if (inventory.size() == 0)
-				{
-					std::cout << "We're all out of items to buy." << std::endl;
-				}
-
-				else
-				{
-					std::cout << "The shopkeeper has the following in stock:" << std::endl;
-
-					for (int i = 0; i < inventory.size(); ++i)
-					{
-						std::cout << "- " << inventory[i] << std::endl;
-					}
-				}
-
-				break;
-
-			default:
-				std::cout << "Go to Hero's Shop to look at the inventory." << std::endl;
-			}
-		}
-
-		else if (command == "buy charm")
-		{
-			switch (location)
-			{
-			case Shop:
-				if (!charmIsObtained)
-				{
-					if (hero.BuyCharm(charmPrice))
-					{
-						std::cout << "You have bought the Charm of Capitalism for 20 gold" << std::endl;
-						charmIsObtained = true;
-						charmMultiplier = 10;
-						inventory[0] = inventory.back();
-						inventory.pop_back();
-					}
-				}
-				else
-				{
-					std::cout << "You have already bought this item." << std::endl;
-				}
-
-				break;
-
-			default:
-				std::cout << "Visit Hero's Shop to purchase items." << std::endl;
-			}
-		}
-
-		else if (command == "buy talisman")
-		{
-			switch (location)
-			{
-			case Shop:
-				if (!talismanIsObtained)
-				{
-					if (hero.BuyTalisman(talismanPrice))
-					{
-						std::cout << "You have bought the Talisman of Truth for 100 gold" << std::endl;
-						talismanIsObtained = true;
-						inventory.pop_back();
-					}
-				}
-				else
-				{
-					std::cout << "You have already bought this item." << std::endl;
-				}
-
-				break;
-
-			default:
-				std::cout << "Visit Hero's Shop to purchase items." << std::endl;
-			}
-		}
-
-		else
-		{
-			InvalidCommand(command);
-		}
-		*/
+		
 	}
 }
 

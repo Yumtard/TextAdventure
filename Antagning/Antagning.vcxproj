@@ -113,7 +113,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AreaManager.cpp" />
     <ClCompile Include="InputManager.cpp" />
+    <ClCompile Include="Tile.cpp" />
     <ClCompile Include="World.cpp" />
     <ClCompile Include="Hero.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -122,6 +124,7 @@
     <ClInclude Include="AreaManager.h" />
     <ClInclude Include="Gloabals.h" />
     <ClInclude Include="InputManager.h" />
+    <ClInclude Include="Tile.h" />
     <ClInclude Include="World.h" />
     <ClInclude Include="Hero.h" />
   </ItemGroup>
