@@ -1,20 +1,10 @@
 #include "AreaManager.h"
 #include <fstream>
 
-//Inits the 2d array of Tiles setting their types
+//load level
 AreaManager::AreaManager()
 {
 	LevelReader();
-
-//	tiles[0][0] = { Tile(Tile::Type::Empty) };
-//	tiles[1][0] = { Tile(Tile::Type::Twilight) };
-//	tiles[2][0] = { Tile(Tile::Type::Empty) };
-//	tiles[0][1] = { Tile(Tile::Type::Plains) };
-//	tiles[1][1] = { Tile(Tile::Type::CrossRoads) };
-//	tiles[2][1] = { Tile(Tile::Type::HeroShop) };
-//	tiles[0][2] = { Tile(Tile::Type::Empty) };
-//	tiles[1][2] = { Tile(Tile::Type::Pool) };
-//	tiles[2][2] = { Tile(Tile::Type::Empty) };
 }
 
 //Gets called in World.cpp
@@ -36,7 +26,8 @@ bool AreaManager::MoveInDirection(Globals::PlayerInput & input)
 {
 	if (input == Globals::West)
 	{
-		if (tiles[x - 1][y].CanWalk() && x > minLevelWidth) //if x is smaller, we can't move west since that's outside of the array
+		const int newPosX = x - 1;
+		if (tiles[newPosX][y].CanWalk() && newPosX >= minLevelWidth) 
 		{
 			x--;
 			return true;
@@ -49,7 +40,8 @@ bool AreaManager::MoveInDirection(Globals::PlayerInput & input)
 
 	else if (input == Globals::East)
 	{
-		if (tiles[x + 1][y].CanWalk() && x < maxLevelWidth - 1)
+		const int newPosX = x + 1;
+		if (tiles[newPosX][y].CanWalk() && newPosX < maxLevelWidth)
 		{
 			x++;
 			return true;
@@ -62,7 +54,8 @@ bool AreaManager::MoveInDirection(Globals::PlayerInput & input)
 
 	else if (input == Globals::North)
 	{
-		if (tiles[x][y - 1].CanWalk() && y > minLevelHeight)
+		const int newPosY = y - 1;
+		if (tiles[x][newPosY].CanWalk() && newPosY >= minLevelHeight)
 		{
 			y--;
 			return true;
@@ -75,7 +68,8 @@ bool AreaManager::MoveInDirection(Globals::PlayerInput & input)
 
 	else if (input == Globals::South)
 	{
-		if (tiles[x][y + 1].CanWalk() && y < maxLevelHeight - 1)
+		const int newPosY = y + 1;
+		if (tiles[x][newPosY].CanWalk() && newPosY < maxLevelHeight)
 		{
 			y++;
 			return true;
@@ -95,11 +89,14 @@ Tile::Type AreaManager::CurrentTile() const
 	return tiles[x][y].GetTileType();
 }
 
+//reads the level from a text file
 void AreaManager::LevelReader()
 {
 	std::ifstream read;
 	read.open("level.txt");
 
+	//loop through the with and height of the level and store the
+	//information in a 2d char array "level"
 	for (int i = minLevelHeight; i < maxLevelHeight; ++i)
 	{
 		for (int j = minLevelWidth; j < maxLevelWidth; ++j)
@@ -109,6 +106,8 @@ void AreaManager::LevelReader()
 	}
 	read.close();
 
+	//loop through the 2d char array and init tiles
+	//Tile type is determined based on what char it is
 	for (int i = minLevelHeight; i < maxLevelHeight; ++i)
 	{
 		for (int j = minLevelWidth; j < maxLevelWidth; ++j)
