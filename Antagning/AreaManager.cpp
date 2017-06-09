@@ -1,17 +1,20 @@
 #include "AreaManager.h"
+#include <fstream>
 
 //Inits the 2d array of Tiles setting their types
 AreaManager::AreaManager()
 {
-	tiles[0][0] = { Tile(Tile::Type::Empty) };
-	tiles[1][0] = { Tile(Tile::Type::Twilight) };
-	tiles[2][0] = { Tile(Tile::Type::Empty) };
-	tiles[0][1] = { Tile(Tile::Type::Plains) };
-	tiles[1][1] = { Tile(Tile::Type::CrossRoads) };
-	tiles[2][1] = { Tile(Tile::Type::HeroShop) };
-	tiles[0][2] = { Tile(Tile::Type::Empty) };
-	tiles[1][2] = { Tile(Tile::Type::Pool) };
-	tiles[2][2] = { Tile(Tile::Type::Empty) };
+	LevelReader();
+
+//	tiles[0][0] = { Tile(Tile::Type::Empty) };
+//	tiles[1][0] = { Tile(Tile::Type::Twilight) };
+//	tiles[2][0] = { Tile(Tile::Type::Empty) };
+//	tiles[0][1] = { Tile(Tile::Type::Plains) };
+//	tiles[1][1] = { Tile(Tile::Type::CrossRoads) };
+//	tiles[2][1] = { Tile(Tile::Type::HeroShop) };
+//	tiles[0][2] = { Tile(Tile::Type::Empty) };
+//	tiles[1][2] = { Tile(Tile::Type::Pool) };
+//	tiles[2][2] = { Tile(Tile::Type::Empty) };
 }
 
 //Gets called in World.cpp
@@ -33,7 +36,7 @@ bool AreaManager::MoveInDirection(Globals::PlayerInput & input)
 {
 	if (input == Globals::West)
 	{
-		if (tiles[x - 1][y].CanWalk() && x > 0) //if x is smaller than 1, we can't move west since that's outside of the array
+		if (tiles[x - 1][y].CanWalk() && x > minLevelWidth) //if x is smaller, we can't move west since that's outside of the array
 		{
 			x--;
 			return true;
@@ -46,7 +49,7 @@ bool AreaManager::MoveInDirection(Globals::PlayerInput & input)
 
 	else if (input == Globals::East)
 	{
-		if (tiles[x + 1][y].CanWalk() && x < 2)
+		if (tiles[x + 1][y].CanWalk() && x < maxLevelWidth - 1)
 		{
 			x++;
 			return true;
@@ -59,7 +62,7 @@ bool AreaManager::MoveInDirection(Globals::PlayerInput & input)
 
 	else if (input == Globals::North)
 	{
-		if (tiles[x][y - 1].CanWalk() && y > 0)
+		if (tiles[x][y - 1].CanWalk() && y > minLevelHeight)
 		{
 			y--;
 			return true;
@@ -72,7 +75,7 @@ bool AreaManager::MoveInDirection(Globals::PlayerInput & input)
 
 	else if (input == Globals::South)
 	{
-		if (tiles[x][y + 1].CanWalk() && y < 2)
+		if (tiles[x][y + 1].CanWalk() && y < maxLevelHeight - 1)
 		{
 			y++;
 			return true;
@@ -90,4 +93,52 @@ bool AreaManager::MoveInDirection(Globals::PlayerInput & input)
 Tile::Type AreaManager::CurrentTile() const
 {
 	return tiles[x][y].GetTileType();
+}
+
+void AreaManager::LevelReader()
+{
+	std::ifstream read;
+	read.open("level.txt");
+
+	for (int i = minLevelHeight; i < maxLevelHeight; ++i)
+	{
+		for (int j = minLevelWidth; j < maxLevelWidth; ++j)
+		{
+			read >> level[i][j];
+		}
+	}
+	read.close();
+
+	for (int i = minLevelHeight; i < maxLevelHeight; ++i)
+	{
+		for (int j = minLevelWidth; j < maxLevelWidth; ++j)
+		{
+			switch (level[i][j])
+			{
+			case 'C':
+				tiles[j][i] = { Tile(Tile::Type::CrossRoads) };
+				break;
+
+			case 'T':
+				tiles[j][i] = { Tile(Tile::Type::Twilight) };
+				break;
+
+			case 'P':
+				tiles[j][i] = { Tile(Tile::Type::Pool) };
+				break;
+
+			case 'G':
+				tiles[j][i] = { Tile(Tile::Type::Plains) };
+				break;
+
+			case 'S':
+				tiles[j][i] = { Tile(Tile::Type::HeroShop) };
+				break;
+
+			case 'X':
+				tiles[j][i] = { Tile(Tile::Type::Empty) };
+				break;
+			}
+		}
+	}
 }
