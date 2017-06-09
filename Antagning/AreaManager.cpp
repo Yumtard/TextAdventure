@@ -27,7 +27,7 @@ bool AreaManager::MoveInDirection(Globals::PlayerInput & input)
 	if (input == Globals::West)
 	{
 		const int newPosX = x - 1;
-		if (tiles[newPosX][y].CanWalk() && newPosX >= minLevelWidth) 
+		if (tiles[newPosX][y].CanWalk() && newPosX >= minLevelWidth) //make sure newPos is not outside of the level
 		{
 			x--;
 			return true;
