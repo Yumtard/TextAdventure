@@ -12,14 +12,9 @@ public:
 		CrossRoads, Plains, Twilight, Pool, HeroShop, Empty
 	};
 	Tile(Type type_in);
-	Tile() = default;
 	bool CanWalk();
 	Type GetTileType() const;
 
 private:
-	bool west;
-	bool east;
-	bool north;
-	bool south;
 	Type type;
 };
