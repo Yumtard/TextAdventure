@@ -8,6 +8,7 @@ class Hero
 {
 public:
 	Hero(int health_in, int gold_in);
+	Hero() = default;
 	void Heal();
 	void AddGold(int amount);
 	void Status() const;
