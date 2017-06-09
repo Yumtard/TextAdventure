@@ -27,7 +27,7 @@ bool AreaManager::MoveInDirection(Globals::PlayerInput & input)
 {
 	if (input == Globals::West)
 	{
-		if (tiles[x - 1][y].CanWalk())
+		if (tiles[x - 1][y].CanWalk() && x > 0)
 		{
 			x--;
 			return true;
@@ -40,7 +40,7 @@ bool AreaManager::MoveInDirection(Globals::PlayerInput & input)
 
 	else if (input == Globals::East)
 	{
-		if (tiles[x + 1][y].CanWalk())
+		if (tiles[x + 1][y].CanWalk() && x < 2)
 		{
 			x++;
 			return true;
@@ -53,7 +53,7 @@ bool AreaManager::MoveInDirection(Globals::PlayerInput & input)
 
 	else if (input == Globals::North)
 	{
-		if (tiles[x][y - 1].CanWalk())
+		if (tiles[x][y - 1].CanWalk() && y > 0)
 		{
 			y--;
 			return true;
@@ -66,7 +66,7 @@ bool AreaManager::MoveInDirection(Globals::PlayerInput & input)
 
 	else if (input == Globals::South)
 	{
-		if (tiles[x][y + 1].CanWalk())
+		if (tiles[x][y + 1].CanWalk() && y < 2)
 		{
 			y++;
 			return true;
