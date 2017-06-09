@@ -11,38 +11,52 @@ World::World()
 
 void World::Update()
 {
+	//start off by handling the current area
 	HandleArea(areamanager.CurrentTile());
+
+	//loops while hero has health and the game isn't won
 	while (hero.IsAlive() && !gameIsWon)
 	{
+
+		//Get user input
 		std::string command;
 		std::getline(std::cin, command);
 		Globals::PlayerInput input = inputManager.GetInput(command);
 
+		//if the command was a direction
+		//if it is then if possible we move to the tile in that direction
 		if (areamanager.Walk(input))
 		{
+			//Gives the user a message and performs potential tasks based on which tile we got moved to
 			HandleArea(areamanager.CurrentTile());
 		}
 		else
 		{
+			//If the command wasn't a direction, this function handles the input instead
 			NonDirectionInput(input, command);
 		}
 	}
-		
+	
+	//Displays a message if hero runs out of health
 	if (!hero.IsAlive())
 	{
 		std::cout << "You got killed. Game over." << std::endl;
 	}
+	//Displays a message if the game is won
 	if (gameIsWon)
 	{
 		std::cout << "Congratulations! You've completed the game." << std::endl;
 	}
 }
 
+//Displays a message if the user input is invalid
+//Shows the user what invalid input was typed
 void World::InvalidCommand(std::string cmnd)
 {
 	std::cout << "Sorry, \"" << cmnd << "\" is not a valid command" << std::endl;
 }
 
+//Does the tasks connected to the current tile
 void World::HandleArea(Tile::Type tileType)
 {
 	switch (tileType)
@@ -67,11 +81,14 @@ void World::HandleArea(Tile::Type tileType)
 	case Tile::Twilight:
 		std::cout << "You have entered the Twlight Cave. A horrifying beast emerges from the shadows." << std::endl;
 
+		//Kills hero if he doesn't have the talisman
 		if (!talismanIsObtained)
 		{
 			std::cout << "The beast is too powerful." << std::endl;
 			hero.KillHero();
 		}
+
+		//Wins the game if he does have the talisman
 		else
 		{
 			std::cout << "You pull out the Talisman of Truth" << std::endl;
@@ -82,6 +99,7 @@ void World::HandleArea(Tile::Type tileType)
 	}
 }
 
+//Handles input thats not a direction
 void World::NonDirectionInput(Globals::PlayerInput _input, std::string cmnd)
 {
 	switch (_input)
@@ -95,13 +113,14 @@ void World::NonDirectionInput(Globals::PlayerInput _input, std::string cmnd)
 		{
 			if (!charmIsObtained)
 			{
+				//if hero is in the shop, doesn't already have the charm and can afford it then he buys it
 				if (hero.BuyCharm(charmPrice))
 				{
 					std::cout << "You have bought the Charm of Capitalism for 20 gold" << std::endl;
-					charmIsObtained = true;
-					charmMultiplier = 10;
-					inventory[0] = inventory.back();
-					inventory.pop_back();
+					charmIsObtained = true; //now hero can no longer buy the charm
+					charmMultiplier = 10;  //increases from 1 to 10. Gets multiplied with the gold reward when killing monsters
+					inventory[0] = inventory.back(); //Sets the first element to the same value as the last element
+					inventory.pop_back(); //deletes the last element
 				}
 			}
 			else
@@ -110,6 +129,7 @@ void World::NonDirectionInput(Globals::PlayerInput _input, std::string cmnd)
 			}
 		}
 
+		//if hero is on another tile than shop
 		else
 		{
 			std::cout << "Visit Hero's Shop to purchase items." << std::endl;
@@ -120,11 +140,13 @@ void World::NonDirectionInput(Globals::PlayerInput _input, std::string cmnd)
 	case Globals::Inventory:
 		if (areamanager.CurrentTile() == Tile::HeroShop)
 		{
+			//when all items have been bought
 			if (inventory.size() == 0)
 			{
 				std::cout << "We're all out of items to buy." << std::endl;
 			}
 
+			//Displays items for sale
 			else
 			{
 				std::cout << "The shopkeeper has the following in stock:" << std::endl;
@@ -136,6 +158,7 @@ void World::NonDirectionInput(Globals::PlayerInput _input, std::string cmnd)
 			}
 		}
 
+		//If hero is on wrong tile
 		else
 		{
 			std::cout << "Visit Hero's shop to see what's available for purchase." << std::endl;
@@ -145,11 +168,11 @@ void World::NonDirectionInput(Globals::PlayerInput _input, std::string cmnd)
 	case Globals::Kill:
 		if (areamanager.CurrentTile() == Tile::Plains)
 		{
-			hero.KillMonster(charmMultiplier);
+			hero.KillMonster(charmMultiplier); //multiplies with 1 or 10 depending if hero has the charm
 		}
 		else
 		{
-			std::cout << "There are no monsters here for you to kill." << std::endl;
+			std::cout << "There are no monsters here for you to kill." << std::endl; //if hero is on wrong tile
 		}
 		break;
 
@@ -177,6 +200,7 @@ void World::NonDirectionInput(Globals::PlayerInput _input, std::string cmnd)
 		}
 		break;
 
+		//For any input that is not a command used anywhere in this game
 	case Globals::Invalid:
 		InvalidCommand(cmnd);
 		break;
